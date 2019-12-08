@@ -1,0 +1,11 @@
+
+00:19:38 INFO  UberParser - The Car created Car{id=1, localPosition=103, withPassenger=false}
+00:19:38 INFO  UberParser - The Car created Car{id=2, localPosition=70, withPassenger=false}
+00:19:38 INFO  InfoReader - Cars data uploaded
+00:19:38 INFO  UberParser - The Client created Client{id=1, localPosition=98, destinationPosition=1}
+00:19:38 INFO  UberParser - The Client created Client{id=2, localPosition=290, destinationPosition=15}
+00:19:38 INFO  UberParser - The Client created Client{id=3, localPosition=5, destinationPosition=9}
+00:19:38 INFO  InfoReader - Clients data uploaded
+00:19:38 INFO  UberService - Car{id=1, localPosition=103, withPassenger=false} with Client{id=1, localPosition=98, destinationPosition=1}
+00:19:41 INFO  UberService - Car{id=2, localPosition=70, withPassenger=false} with Client{id=2, localPosition=290, destinationPosition=15}
+00:19:44 INFO  UberService - Car{id=1, localPosition=1, withPassenger=false} with Client{id=3, localPosition=5, destinationPosition=9}
