@@ -1,22 +1,25 @@
 package com.epam.multithreading.entity;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Car implements Runnable{
 
     private int id;
-    private int localPosition;
-    private boolean withPassenger;
+    private AtomicInteger localPosition;
+    private AtomicBoolean withPassenger;
 
     public Car(int id, int localPosition) {
         this.id = id;
-        this.localPosition = localPosition;
+        this.localPosition = new AtomicInteger(localPosition);
+        this.withPassenger = new AtomicBoolean(false);
     }
 
     @Override
     public void run() {
 
-        withPassenger = true;
+        withPassenger.set(true);
         //System.out.println(this.toString() + " On the road");
 
         try {
@@ -25,7 +28,7 @@ public class Car implements Runnable{
             e.getMessage();
         }
 
-        withPassenger = false;
+        withPassenger.set(false);
         //System.out.println(this.toString() + " Arrived");
     }
 
@@ -33,25 +36,14 @@ public class Car implements Runnable{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getLocalPosition() {
+    public AtomicInteger getLocalPosition() {
         return localPosition;
     }
 
-    public void setLocalPosition(int localPosition) {
-        this.localPosition = localPosition;
-    }
-
-    public boolean isWithPassenger() {
+    public AtomicBoolean getWithPassenger() {
         return withPassenger;
     }
 
-    public void setWithPassenger(boolean withPassenger) {
-        this.withPassenger = withPassenger;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -61,15 +53,15 @@ public class Car implements Runnable{
         Car car = (Car) o;
 
         if (id != car.id) return false;
-        if (localPosition != car.localPosition) return false;
-        return withPassenger == car.withPassenger;
+        if (localPosition != null ? !localPosition.equals(car.localPosition) : car.localPosition != null) return false;
+        return withPassenger != null ? withPassenger.equals(car.withPassenger) : car.withPassenger == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + localPosition;
-        result = 31 * result + (withPassenger ? 1 : 0);
+        result = 31 * result + (localPosition != null ? localPosition.hashCode() : 0);
+        result = 31 * result + (withPassenger != null ? withPassenger.hashCode() : 0);
         return result;
     }
 
@@ -81,5 +73,4 @@ public class Car implements Runnable{
                 ", withPassenger=" + withPassenger +
                 '}';
     }
-
 }

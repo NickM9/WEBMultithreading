@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,11 +31,11 @@ public class UberService implements Runnable {
             int clientLocation = clientsList.get(0).getLocalPosition();
 
             for (Car car : carList){
-                int carLocation = car.getLocalPosition();
+                int carLocation = car.getLocalPosition().get();
                 boolean nearestDifference = Math.abs(clientLocation - carLocation) <
-                                            Math.abs(clientLocation - nearestCar.getLocalPosition());
+                                            Math.abs(clientLocation - nearestCar.getLocalPosition().get());
 
-                if (!car.isWithPassenger() && nearestDifference){
+                if (!car.getWithPassenger().get() && nearestDifference){
                     nearestCar = car;
                 }
 
@@ -45,7 +46,7 @@ public class UberService implements Runnable {
 
             logger.info(nearestCar.toString() + " with " + clientsList.get(0).toString());
 
-            nearestCar.setLocalPosition(clientsList.get(0).getDestinationPosition());
+            nearestCar.getLocalPosition().set(clientsList.get(0).getDestinationPosition());
             clientsList.remove(0);
 
             try {
@@ -56,14 +57,6 @@ public class UberService implements Runnable {
 
         }
 
-    }
-
-    public static void setCarList(List<Car> carList) {
-        UberService.carList = carList;
-    }
-
-    public static void setClientsList(List<Client> clientsList) {
-        UberService.clientsList = clientsList;
     }
 
     public static UberService getInstance(){
@@ -79,5 +72,23 @@ public class UberService implements Runnable {
         }
 
         return uberService;
+    }
+
+    public static List<Car> getCarList() {
+        return carList;
+    }
+
+    public static List<Client> getClientsList() {
+        return clientsList;
+    }
+
+    public static void setCarList(List<Car> carList) {
+        UberService.carList = carList;
+        Collections.copy(UberService.carList, carList);
+    }
+
+    public static void setClientsList(List<Client> clientsList) {
+        UberService.clientsList = clientsList;
+        Collections.copy(UberService.clientsList, clientsList);
     }
 }
